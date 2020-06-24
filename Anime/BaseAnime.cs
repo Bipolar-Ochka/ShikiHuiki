@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 
 namespace ShikiHuiki.Anime
 {
+    
     public class BaseAnime
     {
         [JsonProperty("id")] public long Id { get; set; }

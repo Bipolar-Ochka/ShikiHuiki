@@ -8,14 +8,8 @@ using ShikiHuiki.Anime;
 
 namespace ShikiHuiki.UserClass
 {
-    public class UserAnimeRate
-    {
-        [JsonProperty("id")] public long Id { get; set; }
-        [JsonProperty("score")] public long Score { get; set; }
-        [JsonProperty("status")] public string Status { get; set; }
-        [JsonProperty("episodes")] public long EpisodesWatched { get; set; }
-        [JsonProperty ("created_at")] public DateTimeOffset CreatedAt { get; set; }
-        [JsonProperty("updated_at")] public DateTimeOffset UpdatedAt { get; set; }
+    public class UserAnimeRate : BaseUserAnimeRate
+    {        
         [JsonProperty("user")] public User UserInfo { get; set; }
         [JsonProperty ("anime")] public BaseAnime AnimeInfo { get; set; }
     }

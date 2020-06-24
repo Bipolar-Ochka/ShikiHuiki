@@ -19,6 +19,7 @@ namespace ShikiHuiki
         internal Token AuthToken { get; private set; }
         internal User CurrentUser { get; private set; }
         private event Action<Token> RefreshTokenEvent;
+        public event Action<string> ErrorTextEvent;
 
       
         public ShikimoriClient(string authCode)

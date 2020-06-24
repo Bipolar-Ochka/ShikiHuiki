@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Anime\BaseAnime.cs" />
+    <Compile Include="Constants\AnimeParams.cs" />
     <Compile Include="Constants\URI.cs" />
     <Compile Include="Exceptions\AuthCodeFailedException.cs" />
     <Compile Include="Exceptions\TokenExpiredException.cs" />
@@ -54,6 +55,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AuthRequest.cs" />
     <Compile Include="Requests\HttpContentExtensions.cs" />
+    <Compile Include="Requests\IncrementRequest.cs" />
+    <Compile Include="Requests\UpdateUserRateRequest.cs" />
     <Compile Include="Requests\UserAnimeRequest.cs" />
     <Compile Include="Requests\WhoAmIRequest.cs" />
     <Compile Include="ShikimoriClient.cs" />
@@ -61,6 +64,7 @@
     <Compile Include="TokenContent\MainGetToken.cs" />
     <Compile Include="TokenContent\RefreshGetToken.cs" />
     <Compile Include="TokenContent\Token.cs" />
+    <Compile Include="UserClass\BaseUserAnimeRate.cs" />
     <Compile Include="UserClass\User.cs" />
     <Compile Include="UserClass\UserAnimeRate.cs" />
   </ItemGroup>
