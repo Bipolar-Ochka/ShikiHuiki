@@ -31,7 +31,7 @@ namespace ShikiHuiki.Requests
                 for (int i = 1; ; i++)
                 {
                     var response = await client.GetAsync(string.Format(url, i, limitByReq));
-                    if (response.StatusCode == HttpStatusCode.OK)
+                    if (response.IsSuccessStatusCode)
                     {
                         var temp = JsonConvert.DeserializeObject<List<UserAnimeRate>>(response.Content.ReadAsStringAsync().Result);
                         if (temp is null)

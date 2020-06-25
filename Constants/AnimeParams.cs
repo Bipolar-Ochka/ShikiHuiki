@@ -14,7 +14,8 @@ namespace ShikiHuiki.Constants
         Rewatching,
         Completed,
         OnHold,
-        Dropped
+        Dropped,
+        None,
     }
     public static class AnimeParams
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShikiHuiki.Requests
 {
-    class UpdateUserRateRequest
+    internal static class UpdateUserRateRequest
     {
         //TODO: update user rate requset
     }

@@ -10,14 +10,15 @@ using ShikiHuiki.Exceptions;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Net;
+using ShikiHuiki.TokenContent;
 
 namespace ShikiHuiki.Requests
 {
     internal static class WhoAmIRequest
     {
-        internal static async Task<User> Whoami(string accessToken)
+        internal static async Task<User> Whoami(Token token)
         {
-            using (HttpClient client = ClientWithHeaders(accessToken))
+            using (HttpClient client = ClientWithHeaders(token.AccessToken))
             {
 
                 string url;
@@ -26,7 +27,7 @@ namespace ShikiHuiki.Requests
                     throw new NoUriDictionaryException();
                 }
                 var response = await client.GetAsync(url);
-                if (response.StatusCode == HttpStatusCode.OK)
+                if (response.IsSuccessStatusCode)
                 {
                     return JsonConvert.DeserializeObject<User>(response.Content.ReadAsStringAsync().Result);
                 }
