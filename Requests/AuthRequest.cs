@@ -49,7 +49,7 @@ namespace ShikiHuiki.Requests
                 {
                     throw new NoUriDictionaryException();
                 }
-                var request = await client.PostAsync(uri, refreshTokenRequest.GetHttpContent());
+                var request = await client.PostAsync(uri, refreshTokenRequest.GetHttpContent()).ConfigureAwait(false);
                 if (request.StatusCode == HttpStatusCode.OK)
                 {
                     return JsonConvert.DeserializeObject<Token>(request.Content.ReadAsStringAsync().Result);

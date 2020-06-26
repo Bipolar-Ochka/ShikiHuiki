@@ -11,6 +11,8 @@ using Newtonsoft.Json;
 using System.Net;
 using ShikiHuiki.Exceptions;
 using ShikiHuiki.Requests;
+using System.Diagnostics;
+using System.Collections.Concurrent;
 
 namespace ShikiHuiki
 {
@@ -22,42 +24,49 @@ namespace ShikiHuiki
         public event Action<string> ErrorTextEvent;
 
       
-        public ShikimoriClient(string authCode)
+        public ShikimoriClient()
         {
             RefreshTokenEvent += ShikimoriClient_RefreshTokenEvent;
-            GetToken(authCode);
-            GetCurrentUser();
         }
-        public List<UserAnimeRate> GetAnime(AnimeStatus status=AnimeStatus.None,int limitItemsByReq=50)
+        public async Task ShikiLogin(string authCode)
+        {
+            await GetToken(authCode).ConfigureAwait(false);
+            await GetCurrentUser().ConfigureAwait(false);
+        }
+        public async Task GetAnime(List<UserAnimeRate> testlist, AnimeStatus status=AnimeStatus.None,int limitItemsByReq=50)
         {
             try
             {
-                var animeList = UserAnimeRequest.GetUserAnime(this.CurrentUser, this.AuthToken, limitItemsByReq).Result;
+                await UserAnimeRequest.GetUserAnime(this.CurrentUser, this.AuthToken, limitItemsByReq,testlist).ConfigureAwait(false);
                 if(status != AnimeStatus.None)
                 {
-                    animeList = animeList.Where(item => item.Status == AnimeParams.AnimeStatusString[status]).ToList();
+                    testlist = testlist.Where(item => item.Status == AnimeParams.AnimeStatusString[status]).ToList();
                 }
-                return animeList;
             }
             catch(TokenExpiredException e)
             {
                 RefreshTokenEvent?.Invoke(this.AuthToken);
                 ErrorTextEvent?.Invoke(e.Message);
-                return null;
+                return;
             }
             catch(Exception e)
             {
                 ErrorTextEvent?.Invoke(e.Message);
-                return null;
+                return;
             }
 
         }
 
-        private void GetCurrentUser()
+        public string GetNickname()
+        {
+            return this.CurrentUser?.Name;
+        }
+
+        private async Task GetCurrentUser()
         {
             try
             {
-                var user = WhoAmIRequest.Whoami(this.AuthToken).Result;
+                var user = await WhoAmIRequest.Whoami(this.AuthToken).ConfigureAwait(false);
                 this.CurrentUser = user;
             }
             catch (TokenExpiredException e)
@@ -71,21 +80,22 @@ namespace ShikiHuiki
             }
         }
 
-        private void GetToken(string authCode)
+        private async Task GetToken(string authCode)
         {
             try
             {
-                var tok = AuthRequest.Authorization(authCode).Result;
+                var tok = await AuthRequest.Authorization(authCode).ConfigureAwait(false);
                 this.AuthToken = tok;
             }
             catch (TokenExpiredException e)
             {
                 RefreshTokenEvent?.Invoke(this.AuthToken);
-                ErrorTextEvent?.Invoke(e.Message);
+                //ErrorTextEvent?.Invoke(e.Message);
             }
             catch (Exception e)
             {
-                ErrorTextEvent?.Invoke(e.Message);
+                //ErrorTextEvent?.Invoke(e.Message);
+                throw;
             }
         }
         private void ShikimoriClient_RefreshTokenEvent(Token obj)

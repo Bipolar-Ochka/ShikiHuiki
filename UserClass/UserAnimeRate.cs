@@ -12,5 +12,6 @@ namespace ShikiHuiki.UserClass
     {        
         [JsonProperty("user")] public User UserInfo { get; set; }
         [JsonProperty ("anime")] public BaseAnime AnimeInfo { get; set; }
+
     }
 }

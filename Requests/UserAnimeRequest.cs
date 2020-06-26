@@ -11,17 +11,17 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Net;
 using ShikiHuiki.TokenContent;
+using System.Diagnostics;
 
 namespace ShikiHuiki.Requests
 {
     internal static class UserAnimeRequest
     {
-        internal static async Task<List<UserAnimeRate>> GetUserAnime(User currentUser, Token authToken, int limitByReq)
+        internal static async Task GetUserAnime(User currentUser, Token authToken, int limitByReq, List<UserAnimeRate> inputList)
         {
             using (HttpClient client = ClientWithHeaders(authToken.AccessToken))
             {
                 string url;
-                var list = new List<UserAnimeRate>();
                 if (!URI.ShikiUrls.TryGetValue("UserAnime", out url))
                 {
                     throw new NoUriDictionaryException();
@@ -30,15 +30,16 @@ namespace ShikiHuiki.Requests
                 url += "?page={0}&limit={1}";
                 for (int i = 1; ; i++)
                 {
-                    var response = await client.GetAsync(string.Format(url, i, limitByReq));
+                    var response = await client.GetAsync(string.Format(url, i, limitByReq)).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
-                        var temp = JsonConvert.DeserializeObject<List<UserAnimeRate>>(response.Content.ReadAsStringAsync().Result);
+                        var str = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        var temp = JsonConvert.DeserializeObject<List<UserAnimeRate>>(str);
                         if (temp is null)
                         {
                             break;
                         }
-                        list.AddRange(temp);
+                        inputList.AddRange(temp);
                     }
                     else if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
@@ -49,7 +50,6 @@ namespace ShikiHuiki.Requests
                         throw new FailedRequestException();
                     }
                 }
-                return list;
             }
         }
     }
