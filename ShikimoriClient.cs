@@ -33,15 +33,11 @@ namespace ShikiHuiki
             await GetToken(authCode).ConfigureAwait(false);
             await GetCurrentUser().ConfigureAwait(false);
         }
-        public async Task GetAnime(List<UserAnimeRate> testlist, AnimeStatus status=AnimeStatus.None,int limitItemsByReq=50)
+        public async Task GetAnime(List<UserAnimeRate> testlist, int limitItemsByReq=50)
         {
             try
             {
                 await UserAnimeRequest.GetUserAnime(this.CurrentUser, this.AuthToken, limitItemsByReq,testlist).ConfigureAwait(false);
-                if(status != AnimeStatus.None)
-                {
-                    testlist = testlist.Where(item => item.Status == AnimeParams.AnimeStatusString[status]).ToList();
-                }
             }
             catch(TokenExpiredException e)
             {
@@ -54,7 +50,6 @@ namespace ShikiHuiki
                 ErrorTextEvent?.Invoke(e.Message);
                 return;
             }
-
         }
 
         public string GetNickname()
