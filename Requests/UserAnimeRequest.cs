@@ -69,7 +69,6 @@ namespace ShikiHuiki.Requests
                 {
                     var str = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var array = JsonConvert.DeserializeObject<List<SpecialUserAnimeRate>>(str);
-                    Trace.WriteLine(array.Count());
                     outContainer.AddRange(array);
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)

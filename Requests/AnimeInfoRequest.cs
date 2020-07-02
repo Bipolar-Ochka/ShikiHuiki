@@ -5,6 +5,7 @@ using ShikiHuiki.Exceptions;
 using ShikiHuiki.UserClass;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -25,7 +26,9 @@ namespace ShikiHuiki.Requests
                     throw new NoUriDictionaryException();
                 }
                 url = string.Format(url, animeId);
+                //TODO: add delay
                 var response = await client.GetAsync(url).ConfigureAwait(false);
+                Trace.WriteLine($"{animeId} - status{response.StatusCode}");
                 if (response.IsSuccessStatusCode)
                 {
                     var str = await response.Content.ReadAsStringAsync().ConfigureAwait(false);

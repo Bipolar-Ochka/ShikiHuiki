@@ -75,6 +75,24 @@ namespace ShikiHuiki
             return this.CurrentUser?.Name;
         }
 
+        public async Task GetAnimeFull(ConcurrentBag<SpecialUserAnimeRate> outContainer, AnimeStatus status = AnimeStatus.None)
+        {
+            await GetAnime(outContainer, status).ConfigureAwait(false);
+            await GetInfoForList(outContainer).ConfigureAwait(false);
+        }
+
+        public async Task GetInfoForList(ConcurrentBag<SpecialUserAnimeRate> outContainer)
+        {
+            try
+            {
+                await AnimeInfoForListRequest.InfoForList(outContainer).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                ErrorTextEvent?.Invoke(e.Message);
+                return;
+            }
+        }
         private async Task GetCurrentUser()
         {
             try
