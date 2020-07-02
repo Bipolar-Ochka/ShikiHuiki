@@ -26,10 +26,11 @@ namespace ShikiHuiki.Requests
                     throw new NoUriDictionaryException();
                 }
                 url = string.Format(url, userRateId);
-                var response = await client.PostAsync(url, new StringContent(""));
+                var response = await client.PostAsync(url, new StringContent("")).ConfigureAwait(false);
                 if(response.IsSuccessStatusCode)
                 {
-                    return JsonConvert.DeserializeObject<BaseUserAnimeRate>(response.Content.ReadAsStringAsync().Result);
+                    var str = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    return JsonConvert.DeserializeObject<BaseUserAnimeRate>(str);
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {

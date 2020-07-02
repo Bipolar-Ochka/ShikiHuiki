@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.Net;
 using ShikiHuiki.TokenContent;
 using System.Diagnostics;
+using System.Collections.Concurrent;
 
 namespace ShikiHuiki.Requests
 {
@@ -50,6 +51,42 @@ namespace ShikiHuiki.Requests
                         throw new FailedRequestException();
                     }
                 }
+            }
+        }
+
+        internal static async Task GetSpecialAnime(User user, Token token,ConcurrentBag<SpecialUserAnimeRate> outContainer,AnimeStatus status = AnimeStatus.None)
+        {
+            using (HttpClient client = ClientWithHeaders(token.AccessToken))
+            {
+                string url;
+                if (!URI.ShikiUrls.TryGetValue("UserRates_V2", out url))
+                {
+                    throw new NoUriDictionaryException();
+                }
+                url = (status == AnimeStatus.None) ? string.Format(url, user.Id) : string.Concat(string.Format(url, user.Id),"&status=",AnimeParams.AnimeStatusString[status]);
+                var response = await client.GetAsync(url).ConfigureAwait(false);
+                if (response.IsSuccessStatusCode)
+                {
+                    var str = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var array = JsonConvert.DeserializeObject<List<SpecialUserAnimeRate>>(str);
+                    Trace.WriteLine(array.Count());
+                    outContainer.AddRange(array);
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new TokenExpiredException();
+                }
+                else
+                {
+                    throw new FailedRequestException();
+                }
+            }
+        }
+        public static void AddRange<T>(this ConcurrentBag<T> @this, IEnumerable<T> toAdd)
+        {
+            foreach (var element in toAdd)
+            {
+                @this.Add(element);
             }
         }
     }

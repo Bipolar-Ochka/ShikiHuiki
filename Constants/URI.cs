@@ -16,6 +16,7 @@ namespace ShikiHuiki.Constants
             {"UserRates","https://shikimori.one/api/v2/user_rates/{0}" },
             {"Increment","https://shikimori.one/api/v2/user_rates/{0}/increment" },
             {"Auth","https://shikimori.one/oauth/token" },
+            {"UserRates_V2","https://shikimori.one/api/v2/user_rates?user_id={0}" },
         };
         
     }

@@ -26,10 +26,11 @@ namespace ShikiHuiki.Requests
                 {
                     throw new NoUriDictionaryException();
                 }
-                var request = await client.PostAsync(uri, tokenRequest.GetHttpContent());
+                var request = await client.PostAsync(uri, tokenRequest.GetHttpContent()).ConfigureAwait(false);
                 if (request.StatusCode == HttpStatusCode.OK)
                 {
-                    return JsonConvert.DeserializeObject<Token>(request.Content.ReadAsStringAsync().Result);
+                    var str = await request.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    return JsonConvert.DeserializeObject<Token>(str);
                 }
                 else
                 {
@@ -52,7 +53,8 @@ namespace ShikiHuiki.Requests
                 var request = await client.PostAsync(uri, refreshTokenRequest.GetHttpContent()).ConfigureAwait(false);
                 if (request.StatusCode == HttpStatusCode.OK)
                 {
-                    return JsonConvert.DeserializeObject<Token>(request.Content.ReadAsStringAsync().Result);
+                    var str = await request.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    return JsonConvert.DeserializeObject<Token>(str);
                 }
                 else
                 {

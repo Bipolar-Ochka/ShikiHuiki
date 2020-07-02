@@ -29,7 +29,8 @@ namespace ShikiHuiki.Requests
                 var response = await client.GetAsync(url).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
-                    return JsonConvert.DeserializeObject<User>(response.Content.ReadAsStringAsync().Result);
+                    var str = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    return JsonConvert.DeserializeObject<User>(str);
                 }
                 else if(response.StatusCode == HttpStatusCode.Unauthorized)
                 {

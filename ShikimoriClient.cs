@@ -42,7 +42,7 @@ namespace ShikiHuiki
             catch(TokenExpiredException e)
             {
                 RefreshTokenEvent?.Invoke(this.AuthToken);
-                ErrorTextEvent?.Invoke(e.Message);
+                ErrorTextEvent?.Invoke("Token expired,refreshing, try again");
                 return;
             }
             catch(Exception e)
@@ -52,6 +52,24 @@ namespace ShikiHuiki
             }
         }
 
+        public async Task GetAnime(ConcurrentBag<SpecialUserAnimeRate> outContainer, AnimeStatus status = AnimeStatus.None)
+        {
+            try
+            {
+                await UserAnimeRequest.GetSpecialAnime(this.CurrentUser,this.AuthToken,outContainer,status).ConfigureAwait(false);
+            }
+            catch (TokenExpiredException e)
+            {
+                RefreshTokenEvent?.Invoke(this.AuthToken);
+                ErrorTextEvent?.Invoke(e.Message);
+                return;
+            }
+            catch (Exception e)
+            {
+                ErrorTextEvent?.Invoke(e.Message);
+                return;
+            }
+        }
         public string GetNickname()
         {
             return this.CurrentUser?.Name;
@@ -93,10 +111,13 @@ namespace ShikiHuiki
                 throw;
             }
         }
-        private void ShikimoriClient_RefreshTokenEvent(Token obj)
+        private async void ShikimoriClient_RefreshTokenEvent(Token obj)
         {
-            this.AuthToken = AuthRequest.Authorization(obj).Result;
+            this.AuthToken = await RefreshToken(obj).ConfigureAwait(false);
         }
-
+        public Task<Token> RefreshToken(Token token)
+        {
+            return AuthRequest.Authorization(token);
+        }
     }
 }

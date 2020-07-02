@@ -65,6 +65,7 @@
     <Compile Include="TokenContent\RefreshGetToken.cs" />
     <Compile Include="TokenContent\Token.cs" />
     <Compile Include="UserClass\BaseUserAnimeRate.cs" />
+    <Compile Include="UserClass\SpecialUserAnimeRate.cs" />
     <Compile Include="UserClass\User.cs" />
     <Compile Include="UserClass\UserAnimeRate.cs" />
   </ItemGroup>
