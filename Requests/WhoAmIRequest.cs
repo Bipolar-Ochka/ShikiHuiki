@@ -22,7 +22,7 @@ namespace ShikiHuiki.Requests
             {
 
                 string url;
-                if (!URI.ShikiUrls.TryGetValue("WhoAmI", out url))
+                if (!URI.ShikiUrls.TryGetValue(Link.WhoAmI, out url))
                 {
                     throw new NoUriDictionaryException();
                 }

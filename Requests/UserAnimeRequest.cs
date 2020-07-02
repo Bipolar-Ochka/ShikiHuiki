@@ -23,7 +23,7 @@ namespace ShikiHuiki.Requests
             using (HttpClient client = ClientWithHeaders(authToken.AccessToken))
             {
                 string url;
-                if (!URI.ShikiUrls.TryGetValue("UserAnime", out url))
+                if (!URI.ShikiUrls.TryGetValue(Link.AnimeList, out url))
                 {
                     throw new NoUriDictionaryException();
                 }
@@ -59,7 +59,7 @@ namespace ShikiHuiki.Requests
             using (HttpClient client = ClientWithHeaders(token.AccessToken))
             {
                 string url;
-                if (!URI.ShikiUrls.TryGetValue("UserRates_V2", out url))
+                if (!URI.ShikiUrls.TryGetValue(Link.AnimeListV2, out url))
                 {
                     throw new NoUriDictionaryException();
                 }

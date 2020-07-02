@@ -16,12 +16,12 @@ namespace ShikiHuiki.Requests
 {
     internal static class IncrementRequest
     {
-        internal static async Task<BaseUserAnimeRate> IncrementById(Token token, long userRateId)
+        internal static async Task<SpecialUserAnimeRate> IncrementById(Token token, long userRateId)
         {
             using (HttpClient client = ClientWithHeaders(token.AccessToken))
             {
                 string url;
-                if(!URI.ShikiUrls.TryGetValue("Increment", out url))
+                if(!URI.ShikiUrls.TryGetValue(Link.Increment, out url))
                 {
                     throw new NoUriDictionaryException();
                 }
@@ -30,7 +30,7 @@ namespace ShikiHuiki.Requests
                 if(response.IsSuccessStatusCode)
                 {
                     var str = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    return JsonConvert.DeserializeObject<BaseUserAnimeRate>(str);
+                    return JsonConvert.DeserializeObject<SpecialUserAnimeRate>(str);
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {

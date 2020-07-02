@@ -22,7 +22,7 @@ namespace ShikiHuiki.Requests
             using (HttpClient client = new HttpClient())
             {
                 string uri;
-                if (!URI.ShikiUrls.TryGetValue("Auth", out uri))
+                if (!URI.ShikiUrls.TryGetValue(Link.Auth, out uri))
                 {
                     throw new NoUriDictionaryException();
                 }
@@ -46,7 +46,7 @@ namespace ShikiHuiki.Requests
             using (HttpClient client = new HttpClient())
             {
                 string uri;
-                if (!URI.ShikiUrls.TryGetValue("Auth", out uri))
+                if (!URI.ShikiUrls.TryGetValue(Link.Auth, out uri))
                 {
                     throw new NoUriDictionaryException();
                 }

@@ -6,17 +6,25 @@ using System.Threading.Tasks;
 
 namespace ShikiHuiki.Constants
 {
-    static internal class URI
+    internal enum Link
     {
-        public static Dictionary<string, string> ShikiUrls { get; } = new Dictionary<string, string>()
+        WhoAmI,
+        AnimeList,
+        AnimeListV2,
+        Increment,
+        AnimeInfo,
+        Auth
+    }
+    static internal class URI
+    {       
+        public static Dictionary<Link, string> ShikiUrls { get; } = new Dictionary<Link, string>()
         {
-            {"WhoAmI","https://shikimori.one/api/users/whoami"},
-            {"UserAnime","https://shikimori.one/api/users/{0}/anime_rates"},
-            {"History","https://shikimori.one/api/users/{0}/history" },
-            {"UserRates","https://shikimori.one/api/v2/user_rates/{0}" },
-            {"Increment","https://shikimori.one/api/v2/user_rates/{0}/increment" },
-            {"Auth","https://shikimori.one/oauth/token" },
-            {"UserRates_V2","https://shikimori.one/api/v2/user_rates?user_id={0}" },
+            {Link.WhoAmI,"https://shikimori.one/api/users/whoami"},
+            {Link.AnimeList,"https://shikimori.one/api/users/{0}/anime_rates"},
+            {Link.Increment,"https://shikimori.one/api/v2/user_rates/{0}/increment" },
+            {Link.Auth,"https://shikimori.one/oauth/token" },
+            {Link.AnimeListV2,"https://shikimori.one/api/v2/user_rates?user_id={0}" },
+            {Link.AnimeInfo,"https://shikimori.one/api/animes/{0}" },
         };
         
     }
